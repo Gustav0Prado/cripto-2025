@@ -1,6 +1,6 @@
 import subprocess, time
 
-def encrypt_aes(input: str, output: str, key: str) -> float:
+def encrypt(input: str, output: str, key: str) -> float:
     bytes_key: bytes = key.encode('utf-8')
 
     time_exec = time.time()
@@ -10,7 +10,7 @@ def encrypt_aes(input: str, output: str, key: str) -> float:
 
     return time_exec
 
-def decrypt_aes(input: str, output: str, key: str) -> float:
+def decrypt(input: str, output: str, key: str) -> float:
     bytes_key: bytes = key.encode('utf-8')
 
     time_exec = time.time()

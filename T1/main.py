@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-import argparse
-import aes
+import argparse, aes, nova
 
 parse = argparse.ArgumentParser(description="Argumentos para operação dos algoritmos")
 
@@ -24,13 +23,13 @@ key = input("Insira sua chave: ")
 time = 0
 if args.plain_text:
     if args.aes:
-        time = aes.encrypt_aes(args.plain_text, args.output_file, key)
+        time = aes.encrypt(args.plain_text, args.output_file, key)
     else:
-        pass
+        time = nova.encrypt(args.plain_text, args.output_file, key)
 elif args.cypher_text:
     if args.aes:
-        time = aes.decrypt_aes(args.cypher_text, args.output_file, key)
+        time = aes.decrypt(args.cypher_text, args.output_file, key)
     else:
-        pass
+        time = nova.decrypt(args.cypher_text, args.output_file, key)
 
 print(f'Tempo decorrido: {time:.5f}s')
