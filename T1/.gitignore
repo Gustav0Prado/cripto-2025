@@ -1,2 +1,5 @@
 __pycache__
+build
+.mypy_cache
 *.txt
+*.so
