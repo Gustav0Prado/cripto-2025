@@ -19,6 +19,7 @@ def encrypt(input: str, output: str, key: str) -> float:
         with open(input, 'r') as input_file:
             for line in input_file:
                 for char in line:
+                    # Novo char = char + chave[index]
                     new_char: str = chr(ord(char) + ord(key[k_index]))
                     
                     # Repete chave até o tamanho do texto
@@ -46,6 +47,7 @@ def decrypt(input: str, output: str, key: str) -> float:
         with open(input, 'r') as input_file:
             for line in input_file:
                 for char in line:
+                    # Novo char = char + chave[index]
                     new_char: str = chr(ord(char) - ord(key[k_index]))
 
                     # Repete chave até o tamanho do texto
