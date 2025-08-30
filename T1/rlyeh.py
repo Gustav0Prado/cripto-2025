@@ -4,7 +4,7 @@ def to_ord(c: str) -> str:
     return str(f'{ord(c):04d}')
 
 def to_char(c: str) -> str:
-    return chr(int(c[0]+c[1]+c[2]+c[3])-2)
+    return chr(int(c[0]+c[1]+c[2]+c[3]))
 
 def encrypt(input: str, output: str, key: str) -> float:
     time_exec: float = time.perf_counter()
@@ -20,7 +20,7 @@ def encrypt(input: str, output: str, key: str) -> float:
             for line in input_file:
                 for char in line:
                     # Novo char = char + chave[index]
-                    new_char: str = chr(ord(char) + ord(key[k_index]))
+                    new_char: str = chr(abs(ord(char) + ord(key[k_index])))
                     
                     # Repete chave até o tamanho do texto
                     k_index += 1
@@ -48,7 +48,7 @@ def decrypt(input: str, output: str, key: str) -> float:
             for line in input_file:
                 for char in line:
                     # Novo char = char + chave[index]
-                    new_char: str = chr(ord(char) - ord(key[k_index]))
+                    new_char: str = chr(abs(ord(char) - ord(key[k_index])))
 
                     # Repete chave até o tamanho do texto
                     k_index += 1

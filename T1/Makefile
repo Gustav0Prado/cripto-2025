@@ -1,5 +1,12 @@
-main: main.py aes.py rlyeh.py
-	python3 -m mypyc main.py aes.py rlyeh.py
+SOURCES := main.py aes.py rlyeh.py
+STAMP := .mypyc.stamp
+
+.PHONY: all clean
+all: $(STAMP)
+
+$(STAMP): $(SOURCES)
+	python3 -m mypyc $(SOURCES)
+	touch $@
 
 clean:
-	rm -rf *.txt *.so build
+	rm -f $(STAMP) *.so *.txt
