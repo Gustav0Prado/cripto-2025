@@ -18,7 +18,7 @@ def main() -> None:
     if not args.aes and not args.rlyeh:
         raise ValueError("Defina qual cifra usar com -a (AES) ou -n (Nova)")
 
-    key = input("Insira sua chave: ")
+    key: str = input("Insira sua chave: ")
 
     time: float = 0.0
     if args.plain_text:

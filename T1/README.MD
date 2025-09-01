@@ -15,7 +15,12 @@ Para rodar o AES, utilizamos diretamente a OpenSSL do Linux com a opção `aes-1
 
 # Medição de tempo
 
-Para medir o tempo de cada um utilizamos ...
+Para medir o tempo de cada um utilizamos a biblioteca padrão de tempo do Python, `time` e como função para medir o tempo usamos o `perf_counter()`, que ao contrário da função `time()` é melhor para o nosso caso por ser bem mais exato em cenários onde se necessita de precisão na medição de tempo.
+Basicamente para medir o tempo:
+
+- Salvamos um timestamp com `stamp = time.pref_counter()`
+- Rodamos a função desejada
+- Após terminar de rodar, calculamos um novo timestamp com `stamp = (time.perf_counter() - stamp)`
 
 # Gŕaficos
 
