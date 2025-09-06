@@ -1,78 +1,109 @@
-import time, string, random
-
-###########################  SHARED  ##########################
-########################## FUNCTIONS ##########################
-
-def create_matrix(text: str, length: int) -> list[list[str]]:
-    matrix = []
-    remainder = (len(text) % length)
-    if(remainder != 0):
-        for i in range(remainder, length):
-            text += random.choice(string.ascii_letters)
-    while text:
-        line = []
-        for i in range(0,length):
-            line.append(text[0])
-            text = text[1:]
-        matrix.append(line)
-    return matrix
+import time
 
 ########################### ENCRYPT ###########################
 ########################## FUNCTIONS ##########################
 
-def cipher_text(matrix: list[list[str]], key: str) -> str:
+def create_matrix(text: str, key: str) -> list[list[str]]:
+    key_len = len(key)
+    matrix = []
+
+    remainder = (len(text) % key_len)
+    if(remainder != 0):
+        for i in range(remainder, key_len):
+            text += ' '
+
+    while text:
+        line = []
+        for i in range(key_len):
+            line.append(text[0])
+            text = text[1:]
+        matrix.append(line)
+
+    return matrix
+
+def rebuild_ciphered_text(matrix: list[list[str]], key: str) -> str:
     sl = sorted(enumerate(key), key=lambda x: x[1])
-    text = ""
-    for j in range(0, len(key)):
-        new_line = ""
-        for i in range(0, len(matrix)):
-            new_line += matrix[i][sl[j][0]]
-        text += new_line
+    text = ''.join(
+        str(matrix[i][sl[j][0]])
+        for j in range(len(key))
+        for i in range(len(matrix))
+    )
 
     return text
 
-def encrypt(input: str, output: str, first_key: str, second_key: str) -> float:
+def encrypt(input: str, output: str, first_key: str, second_key: str, third_key: str) -> float:
     time_exec = time.perf_counter()
-    first_len = len(first_key)
-    second_len = len(second_key)
     with open(output, 'w') as output_file:
         with open(input, 'r') as input_file:
             text = input_file.read()
 
-            transposition_matrix = create_matrix(text, first_len)
-            transpose_text = cipher_text(transposition_matrix, first_key)
+            transposition_matrix = create_matrix(text, first_key)
+            transpose_text = rebuild_ciphered_text(transposition_matrix, first_key)
 
-            second_transpose = create_matrix(transpose_text, second_len)
-            ciphered_text = cipher_text(second_transpose, second_key)
+            second_transpose = create_matrix(transpose_text, second_key)
+            second_transpose_text = rebuild_ciphered_text(second_transpose, second_key)
+
+            third_transpose = create_matrix(second_transpose_text, third_key)
+            ciphered_text = rebuild_ciphered_text(third_transpose, third_key)
+
             output_file.write(ciphered_text)
 
-    return time.perf_counter() - time_exec;
+    return time.perf_counter() - time_exec
 
 ########################### DECRYPT ###########################
 ########################## FUNCTIONS ##########################
 
-def decipher_text(matrix: list[list[str]], key: str) -> str:
-    sl = sorted(enumerate(key), key=lambda x: x[1])
-    text = ""
-    for j in range(0, len(key)):
-        new_line = ""
-        for i in range(0, len(matrix)):
-            new_line += matrix[i][sl[j][0]]
-        text += new_line
+def reorder_matrix(matrix: list[list[str]], sl: list[tuple[int, str]], key_len: int) -> list[list[str]]:
+    ordered_matrix = []
+    for i in range(key_len):
+        index = next(idx for idx, (orig_idx, _) in enumerate(sl) if orig_idx == i)
+        ordered_matrix.append(matrix[index])
 
+    return ordered_matrix
+
+def create_transpose_matrix(text: str, key: str) -> list[list[str]]:
+    key_len = len(key)
+    matrix = []
+    remainder = (len(text) % key_len)
+    if(remainder != 0):
+        for i in range(remainder, key_len):
+            text += ' '
+
+    columns = (len(text) // key_len)
+    while text:
+        line = []
+        for i in range(columns):
+            line.append(text[0])
+            text = text[1:]
+        matrix.append(line)
+
+    sl = sorted(enumerate(key), key=lambda x: x[1])
+    reordered_matrix = reorder_matrix(matrix, sl, len(key))
+
+    transposed_matrix = [list(row) for row in zip(*reordered_matrix)]
+    return transposed_matrix
+
+def rebuild_deciphered_text(matrix: list[list[str]], key: str ) -> str:
+    text = ''.join(
+        [str(matrix[i][j])
+         for i in range(len(matrix))
+         for j in range(len(matrix[i]))]
+    ).rstrip()
     return text
 
-def decrypt(input: str, output: str, second_key: str, first_key: str) -> float: # NOT WORKING YET
+def decrypt(input: str, output: str, third_key: str, second_key: str, first_key: str) -> float:
     time_exec = time.perf_counter()
-    first_len = len(first_key)
-    second_len = len(second_key)
     with open(output, 'w') as output_file:
         with open(input, 'r') as input_file:
             text = input_file.read()
-            transposition_matrix = create_matrix(text, first_len)
-            transpose_text = decipher_text(transposition_matrix, first_key)
+            transposition_matrix = create_transpose_matrix(text, first_key)
+            transpose_text = rebuild_deciphered_text(transposition_matrix, first_key)
 
-            second_transpose = create_matrix(transpose_text, second_len)
-            deciphered_text = decipher_text(second_transpose, second_key)
+            second_transpose = create_transpose_matrix(transpose_text, second_key)
+            second_transpose_text = rebuild_deciphered_text(second_transpose, second_key)
+
+            third_transpose = create_transpose_matrix(second_transpose_text, third_key)
+            deciphered_text = rebuild_deciphered_text(third_transpose, third_key)
+
             output_file.write(deciphered_text)
-    return time.perf_counter() - time_exec;
+    return time.perf_counter() - time_exec

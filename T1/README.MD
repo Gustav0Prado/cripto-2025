@@ -7,7 +7,7 @@ O objetivo desse trabalho é "criar" uma cifra nova utilizando as cifras aprendi
 ## Cifras usadas
 
 - Cifra de substituição:
-- Cifra de transposição:
+- Cifra de transposição: Triple Columnar Transposition
 
 ## AES
 
@@ -21,6 +21,10 @@ Basicamente para medir o tempo:
 - Salvamos um timestamp com `stamp = time.pref_counter()`
 - Rodamos a função desejada
 - Após terminar de rodar, calculamos um novo timestamp com `stamp = (time.perf_counter() - stamp)`
+
+# Exemplos de uso
+Para criptografar por transposição: python3 main.py -t -c clear_text.txt -o clear_text.enc 
+Para descriptografar por transposição: python3 main.py -t -d clear_text.enc -o clear_text.dec
 
 # Gŕaficos
 

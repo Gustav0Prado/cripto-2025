@@ -28,7 +28,8 @@ if args.plain_text:
         time = new_cipher.encrypt(args.plain_text, args.output_file, key)
     elif args.transposition:
         second_key: str = input("Insira sua segunda chave: ")
-        time = columnar.encrypt(args.plain_text, args.output_file, key, second_key)
+        third_key: str = input("Insira sua terceira chave: ")
+        time = columnar.encrypt(args.plain_text, args.output_file, key, second_key, third_key)
 elif args.cypher_text:
     if args.aes:
         time = aes.decrypt(args.cypher_text, args.output_file, key)
@@ -36,6 +37,7 @@ elif args.cypher_text:
         time = new_cipher.encrypt(args.cypher_text, args.output_file, key)
     elif args.transposition:
         second_key: str = input("Insira sua segunda chave: ")
-        time = columnar.decrypt(args.cypher_text, args.output_file, key, second_key)
+        third_key: str = input("Insira sua terceira chave: ")
+        time = columnar.decrypt(args.cypher_text, args.output_file, key, second_key, third_key)
 
 print(f'Tempo decorrido: {time:.5f}s')
