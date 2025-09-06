@@ -19,12 +19,7 @@ def encrypt(input: str, output: str, key: str) -> float:
         with open(input, 'r') as input_file:
             for line in input_file:
                 subs = substitute(line)
-
-                # Transposição aqui!!
-                # ciphered = subs + transp
-                ciphered = subs
-                
-                output_file.write(ciphered)
+                output_file.write(subs)
 
     return (time.perf_counter() - time_exec)
 
@@ -37,11 +32,6 @@ def decrypt(input: str, output: str, key: str) -> float:
         with open(input, 'r') as input_file:
             for line in input_file:
                 subs = substitute(line)
-
-                # Transposição aqui!!
-                # ciphered = subs + transp
-                ciphered = subs
-                
-                output_file.write(ciphered)
+                output_file.write(subs)
 
     return (time.perf_counter() - time_exec)
