@@ -31,22 +31,16 @@ def rebuild_ciphered_text(matrix: list[list[str]], key: str) -> str:
 
     return text
 
-def encrypt(input: str, output: str, first_key: str, second_key: str, third_key: str) -> float:
+def encrypt(input: str, output: str, first_key: str, second_key: str) -> float:
     time_exec = time.perf_counter()
     with open(output, 'w') as output_file:
-        with open(input, 'r') as input_file:
-            text = input_file.read()
+        transposition_matrix = create_matrix(input, first_key)
+        transpose_text = rebuild_ciphered_text(transposition_matrix, first_key)
 
-            transposition_matrix = create_matrix(text, first_key)
-            transpose_text = rebuild_ciphered_text(transposition_matrix, first_key)
+        second_transpose = create_matrix(transpose_text, second_key)
+        ciphered_text = rebuild_ciphered_text(second_transpose, second_key)
 
-            second_transpose = create_matrix(transpose_text, second_key)
-            second_transpose_text = rebuild_ciphered_text(second_transpose, second_key)
-
-            third_transpose = create_matrix(second_transpose_text, third_key)
-            ciphered_text = rebuild_ciphered_text(third_transpose, third_key)
-
-            output_file.write(ciphered_text)
+        output_file.write(ciphered_text)
 
     return time.perf_counter() - time_exec
 
@@ -91,19 +85,16 @@ def rebuild_deciphered_text(matrix: list[list[str]], key: str ) -> str:
     ).rstrip()
     return text
 
-def decrypt(input: str, output: str, third_key: str, second_key: str, first_key: str) -> float:
+def decrypt(input: str, second_key: str, first_key: str) -> float:
     time_exec = time.perf_counter()
-    with open(output, 'w') as output_file:
-        with open(input, 'r') as input_file:
-            text = input_file.read()
-            transposition_matrix = create_transpose_matrix(text, first_key)
-            transpose_text = rebuild_deciphered_text(transposition_matrix, first_key)
 
-            second_transpose = create_transpose_matrix(transpose_text, second_key)
-            second_transpose_text = rebuild_deciphered_text(second_transpose, second_key)
+    with open(input, 'r') as input_file:
+        text = input_file.read()
+        transposition_matrix = create_transpose_matrix(text, first_key)
+        transpose_text = rebuild_deciphered_text(transposition_matrix, first_key)
 
-            third_transpose = create_transpose_matrix(second_transpose_text, third_key)
-            deciphered_text = rebuild_deciphered_text(third_transpose, third_key)
+        second_transpose = create_transpose_matrix(transpose_text, second_key)
+        deciphered_text = rebuild_deciphered_text(second_transpose, second_key)
 
-            output_file.write(deciphered_text)
-    return time.perf_counter() - time_exec
+            
+    return time.perf_counter() - time_exec, deciphered_text

@@ -10,18 +10,16 @@ def substitute(text:str) -> str:
 
     return out
 
-def encrypt(input: str, output: str, key: str) -> float:
+def encrypt(input: str, key: str) -> float:
     time_exec = time.perf_counter()
     
     random.seed(key)
+    with open(input, 'r') as input_file:
+        for line in input_file:
+            subs = substitute(line)
+                
 
-    with open(output, 'w') as output_file:
-        with open(input, 'r') as input_file:
-            for line in input_file:
-                subs = substitute(line)
-                output_file.write(subs)
-
-    return (time.perf_counter() - time_exec)
+    return (time.perf_counter() - time_exec), subs
 
 def decrypt(input: str, output: str, key: str) -> float:
     time_exec = time.perf_counter()
@@ -29,9 +27,8 @@ def decrypt(input: str, output: str, key: str) -> float:
     random.seed(key)
 
     with open(output, 'w') as output_file:
-        with open(input, 'r') as input_file:
-            for line in input_file:
-                subs = substitute(line)
-                output_file.write(subs)
+        for line in input:
+            subs = substitute(line)
+            output_file.write(subs)
 
     return (time.perf_counter() - time_exec)
