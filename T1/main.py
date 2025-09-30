@@ -69,9 +69,9 @@ if args.benchmarking:
     df3 = pd.DataFrame(times[2], columns=['Operation', 'Time (seconds)'])
     df3['File'] = files_list[2]
 
-    create_plot(df1, "LoremIpsum", "10kb")
-    create_plot(df2, "Frankenstein", "500kb")
-    create_plot(df3, "Complete Works Shakespeare", "5mb")
+    create_plot(df1, "LoremIpsum", "10kb file")
+    create_plot(df2, "Frankenstein", "500kb file")
+    create_plot(df3, "Complete Works Shakespeare", "5mb file")
 
     print(times)
     os.remove('intermed.txt')

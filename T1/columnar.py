@@ -9,7 +9,7 @@ def create_matrix(text: str, key: str) -> list[list[str]]:
 
     remainder = len(text) % key_len
     if remainder != 0:
-       text += " " * (key_len - remainder)
+       text += "¤" * (key_len - remainder)
 
     return [list(text[i:i + key_len]) for i in range(0, len(text), key_len)]
 
@@ -42,7 +42,7 @@ def create_transpose_matrix(text: str, key: str) -> list[list[str]]:
 
     remainder = len(text) % key_len
     if remainder != 0:
-        text += " " * (key_len - remainder)
+        text += "¤" * (key_len - remainder)
 
     columns = len(text) // key_len
     matrix = [list(text[i:i + columns]) for i in range(0, len(text), columns)]
@@ -53,7 +53,7 @@ def create_transpose_matrix(text: str, key: str) -> list[list[str]]:
     return [list(row) for row in zip(*reordered_matrix)]
 
 def rebuild_deciphered_text(matrix: list[list[str]], key: str ) -> str:
-    return "".join(ch for row in matrix for ch in row).rstrip()
+    return "".join(ch for row in matrix for ch in row).rstrip("¤")
 
 def decrypt(input: str, output: str, second_key: str, first_key: str) -> float:
     time_exec = time.perf_counter()
